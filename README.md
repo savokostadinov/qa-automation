@@ -5,6 +5,7 @@
 # AI-Assisted QA Automation - PrestaShop Demo
 
 ## G+D Netcetera x FINKI Collaboration
+This project was developed as part of a collaboration between **Netcetera** and the **Faculty of Computer Science & Engineering (FINKI)**, focused on applying AI in Quality Assurance and test automation workflows.
 
 ### Full Project Presentation: https://newqaprezv1.vercel.app
 
