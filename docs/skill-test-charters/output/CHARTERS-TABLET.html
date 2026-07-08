@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Charters — Tablet</title>
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #1e2235;
+      background: #eef1f6;
+      margin: 0;
+      padding: 0 0 64px 0;
+    }
+
+    /* ── Cover page ── */
+    .cover {
+      background: linear-gradient(135deg, #4A90D9 0%, #376ca2 100%);
+      color: white;
+      padding: 80px 72px 72px 72px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 40px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .cover .label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 20px;
+      position: relative; z-index: 1;
+    }
+    .cover h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0 0 10px 0;
+      line-height: 1.15;
+      position: relative; z-index: 1;
+    }
+    .cover .subtitle {
+      font-size: 16px;
+      opacity: 0.8;
+      margin-bottom: 40px;
+      position: relative; z-index: 1;
+    }
+    .cover .meta {
+      display: flex;
+      gap: 48px;
+      font-size: 12px;
+      opacity: 0.7;
+      flex-wrap: wrap;
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 24px;
+    }
+    .cover .meta span { display: flex; flex-direction: column; gap: 2px; }
+    .cover .meta strong { font-size: 16px; font-weight: 700; opacity: 1; color: white; }
+
+    /* ── TOC ── */
+    .toc {
+      background: white;
+      margin: 40px auto;
+      max-width: 860px;
+      border-radius: 16px;
+      padding: 40px 52px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      page-break-after: always;
+    }
+    .toc h2 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #4A90D9;
+      margin-top: 0;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e9f1fa;
+    }
+    .toc ol {
+      padding-left: 0;
+      margin: 0;
+      list-style: none;
+      counter-reset: toc-counter;
+    }
+    .toc li {
+      counter-increment: toc-counter;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f2f5;
+    }
+    .toc li:last-child { border-bottom: none; }
+    .toc li::before {
+      content: counter(toc-counter, decimal-leading-zero);
+      font-size: 11px;
+      font-weight: 700;
+      color: #4A90D9;
+      opacity: 0.5;
+      flex-shrink: 0;
+      width: 24px;
+    }
+    .toc a {
+      color: #1e2235;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      flex: 1;
+    }
+    .toc a:hover { color: #4A90D9; }
+    .toc .toc-area {
+      font-size: 10px;
+      font-weight: 600;
+      color: white;
+      background: #4A90D9;
+      opacity: 0.7;
+      border-radius: 20px;
+      padding: 2px 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      flex-shrink: 0;
+    }
+
+    /* ── Charter card ── */
+    .charter {
+      background: white;
+      margin: 40px auto;
+      max-width: 860px;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      overflow: visible;
+      page-break-inside: avoid;
+      page-break-after: always;
+      scroll-margin-top: 32px;
+    }
+    .charter-header {
+      background: linear-gradient(100deg, #4A90D9 0%, #376ca2 100%);
+      color: white;
+      padding: 28px 40px 24px 40px;
+      border-radius: 16px 16px 0 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .charter-header::after {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+    }
+    .charter-id {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      opacity: 0.75;
+      margin-bottom: 10px;
+      position: relative; z-index: 1;
+    }
+    .charter-header h2 {
+      margin: 0 0 12px 0;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.4;
+      position: relative; z-index: 1;
+    }
+    .charter-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      position: relative; z-index: 1;
+    }
+    .charter-header .platform-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 3px 14px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .charter-body {
+      padding: 36px 40px 40px 40px;
+    }
+
+    /* ── Section grid layout ── */
+    .sections-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 32px;
+    }
+    .section-full { grid-column: 1 / -1; }
+
+    /* ── Sub-labels (e.g. "From Reference Test Cases:") ── */
+    .sub-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #376ca2;
+      margin: 16px 0 8px 0;
+      opacity: 0.7;
+    }
+    .sub-label:first-child { margin-top: 0; }
+
+    /* ── References metadata block ── */
+    .ref-block {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 16px;
+      font-size: 13px;
+      background: #f8f9fc;
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+    .ref-key {
+      font-weight: 600;
+      color: #376ca2;
+      white-space: nowrap;
+    }
+    .ref-val { color: #3a3f52; }
+
+    /* ── TC reference list (in SCOPE section) ── */
+    .tc-ref-list {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .tc-ref-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 7px 12px;
+      margin-bottom: 4px;
+      border-radius: 6px;
+      background: #f8f9fc;
+      font-size: 13px;
+      color: #3a3f52;
+      line-height: 1.5;
+    }
+    .tc-ref-list li .tc-id {
+      font-weight: 700;
+      color: #376ca2;
+      white-space: nowrap;
+      min-width: 52px;
+    }
+    .tc-ref-list li .tc-title { flex: 1; }
+
+    /* ── Sections ── */
+    .section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #4A90D9;
+      margin-bottom: 14px;
+    }
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 14px;
+      background: #4A90D9;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .section p {
+      margin: 0 0 10px 0;
+      color: #3a3f52;
+      line-height: 1.7;
+    }
+    .section p:last-child { margin-bottom: 0; }
+
+    /* ── Ordered lists (numbered test ideas) ── */
+    .section ol {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+      counter-reset: idea-counter;
+    }
+    .section ol li {
+      counter-increment: idea-counter;
+      display: flex;
+      gap: 14px;
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      background: #f8f9fc;
+      border-left: 3px solid #e9f1fa;
+      line-height: 1.6;
+      color: #3a3f52;
+      font-size: 14px;
+    }
+    .section ol li:hover {
+      background: #f0f3fa;
+      border-left-color: #4A90D9;
+    }
+    .section ol li::before {
+      content: counter(idea-counter);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #4A90D9;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Unordered lists (bullets) ── */
+    .section ul {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .section ul li {
+      display: flex;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f2f5;
+      color: #3a3f52;
+      font-size: 14px;
+      line-height: 1.6;
+      align-items: flex-start;
+    }
+    .section ul li:last-child { border-bottom: none; }
+    .section ul li::before {
+      content: '';
+      display: inline-block;
+      min-width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4A90D9;
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    /* ── Test case table ── */
+    .tc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 4px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .tc-table th {
+      background: #e9f1fa;
+      color: #376ca2;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    .tc-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0f2f5;
+      vertical-align: top;
+      color: #3a3f52;
+    }
+    .tc-table tr:last-child td { border-bottom: none; }
+    .tc-table tr:hover td { background: #fafbfe; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .badge-pass { background: #d1fae5; color: #065f46; }
+    .badge-fail { background: #fee2e2; color: #991b1b; }
+
+    /* ── Defect table ── */
+    .defect-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 4px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .defect-table th {
+      background: #fef9ec;
+      color: #92400e;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    .defect-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0f2f5;
+      vertical-align: top;
+      color: #3a3f52;
+    }
+    .severity-high   { color: #b91c1c; font-weight: 700; }
+    .severity-major  { color: #b91c1c; font-weight: 700; }
+    .severity-medium { color: #d97706; font-weight: 600; }
+    .severity-minor  { color: #059669; font-weight: 600; }
+    .severity-low    { color: #059669; font-weight: 600; }
+
+    /* ── Footer ── */
+    .page-footer {
+      max-width: 860px;
+      margin: 0 auto 48px auto;
+      text-align: center;
+      font-size: 12px;
+      color: #9ca3af;
+      padding: 24px 36px 0 36px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .page-footer a { color: #9ca3af; }
+
+    /* ── Print ── */
+    @media print {
+      body { background: white; padding: 0; }
+      .charter { box-shadow: none; border: 1px solid #e5e7eb; margin: 20px auto; }
+      .toc { box-shadow: none; border: 1px solid #e5e7eb; }
+      .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .charter-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .section ol li { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .toc li::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+
+    <div class="cover">
+      <div class="label">Session-Based Test Management · SBTM</div>
+      <h1>Test Charters<br>Tablet</h1>
+      <div class="subtitle">PrestaShop Demo Shop &nbsp;·&nbsp; demo.prestashop.com</div>
+      <div class="meta">
+        <span><strong>1</strong>Charters</span>
+        <span><strong>Tablet</strong>Platform</span>
+        <span><strong>July 04, 2026</strong>Generated</span>
+      </div>
+    </div>
+
+
+    <div class="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li>
+          <a href="#chr-tab-cart-006">Shopping Cart</a>
+          <span class="toc-area">Shopping Cart</span>
+        </li></ol>
+    </div>
+
+
+    <div class="charter" id="chr-tab-cart-006">
+      <div class="charter-header">
+        <div class="charter-id">Charter &nbsp;·&nbsp; Tablet &nbsp;·&nbsp; Shopping Cart &nbsp;·&nbsp; #6</div>
+        <h2>Shopping Cart</h2>
+        <div class="charter-meta">
+          <span class="platform-badge">Tablet</span>
+          <span class="platform-badge">Shopping Cart</span>
+        </div>
+      </div>
+      <div class="charter-body">
+        <div class="sections-grid">
+        <div class="section section-full">
+          <div class="section-title">MISSION</div>
+          <p>Explore the Shopping Cart area of the PrestaShop demo shop on Tablet to discover defects and verify that quantity management rules are enforced correctly for both physical and digital products, and that those limits are applied consistently across the product detail page and the cart/checkout page.</p>
+<div class="sub-label">Focus Areas</div>
+<ul><li>Quantity limit enforcement for physical products (stock-based cap)</li><li>Absence of quantity restriction for digital/downloadable products</li><li>Consistency of quantity rules between the product detail page and the cart</li><li>Edge-case boundary inputs (0, negative, max, max+1, non-numeric, decimals)</li><li>UI feedback quality when a quantity rule is violated (inline error, cap, or block)</li><li>Cart totals and line-item price accuracy after quantity changes</li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">SCOPE — WHAT IS COVERED</div>
+          <p>This session focuses on quantity management behaviour in the cart and on the product detail page for both physical and digital product types on a tablet viewport. Reference Test Cases Included:</p>
+<ul class="tc-ref-list"><li><span class="tc-id">TC_13</span><span class="tc-title">Verify quantity limit is enforced for physical products      <span class="badge badge-pass">PASS</span></span></li><li><span class="tc-id">TC_14</span><span class="tc-title">Verify no quantity limit for digital products                <span class="badge badge-pass">PASS</span></span></li><li><span class="tc-id">TC_15</span><span class="tc-title">Verify quantity limit is consistent across application       <span class="badge badge-pass">PASS</span></span></li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">SCOPE — WHAT IS NOT COVERED</div>
+          <ul><li>Payment processing or checkout completion (no real transactions)</li><li>Back-end stock management or inventory administration</li><li>Performance or load testing of the cart API</li><li>Accessibility standards (WCAG) beyond basic tap-reachability</li><li>Guest vs. logged-in price differences (out of scope for this session)</li><li>Shipping cost calculations and coupon/discount codes</li><li>Wishlist or save-for-later features</li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">START CONDITIONS (Preconditions)</div>
+          <ul><li>Device / Browser: Tablet viewport (768–1024 px wide) — Chrome or Safari</li><li>URL: https://demo.prestashop.com/#/en/front</li><li>Account status: logged out (guest) — re-test key steps logged in if time permits</li><li>Cart state: empty at session start; clear cart between sub-scenarios</li><li>Physical product identified: a product with a visible stock quantity (e.g. &quot;Hummingbird Printed T-Shirt&quot; or &quot;Mug The Best Is Yet To Come&quot;)</li><li>Digital product identified: a downloadable/virtual product (e.g. a vector graphic from the &quot;Stationery&quot; category)</li><li>Test quantity values prepared: 0, 1, max-1, max, max+1, 70000, -1, 0.5, &quot;abc&quot;</li><li>Note the displayed maximum on the product page before each test and record it</li></ul>
+        </div>
+
+        <div class="section section-full">
+          <div class="section-title">TEST IDEAS &amp; EXPLORATION NOTES</div>
+          <div class="sub-label">From Reference Test Cases</div>
+<ol><li>TC_13 — On a physical product page, locate and note the stated maximum quantity (displayed as &quot;Max: X&quot;, greyed-out stepper cap, or validation tooltip). Attempt to type max+1 directly into the quantity field. Verify the system either caps the value at max, shows an inline error, or prevents Add-to-Cart. Then test at max-1 (should be accepted), at max (should be accepted), and at 0 or a negative value (should be rejected with a clear error message). Record the exact UI response for each boundary value.</li></ol>
+<ol><li>TC_14 — Open a digital product (e.g., vector graphic). Attempt to enter a very large quantity (e.g., 70000) into the quantity field. Verify the system accepts it without restriction and adds the item to the cart successfully. Confirm no stock-cap message appears and no error is shown. Also verify the cart line-item total reflects the large quantity correctly.</li></ol>
+<ol><li>TC_15 — Add a physical product to the cart at its maximum allowed quantity (confirmed from TC_13). Navigate to the Cart page. Attempt to increment the quantity further from within the cart. Verify the same stock limit is enforced on the cart page as on the product detail page. Then test the same consistency check for the digital product: confirm there is still no restriction when updating quantity from within the cart.</li></ol>
+<div class="sub-label">Exploratory Extensions (not in reference docs)</div>
+<ol><li>Stepper button behaviour — Use the + / stepper buttons (rather than typing) to reach the maximum for a physical product. Verify the + button becomes disabled or stops incrementing once the max is reached, rather than allowing over-limit values silently.</li></ol>
+<ol><li>Non-numeric and decimal inputs — Type &quot;abc&quot;, &quot;0.5&quot;, &quot;-5&quot;, and an empty string into the quantity field for a physical product. Verify appropriate validation messages appear and the cart is not updated with an invalid value.</li></ol>
+<ol><li>Cart badge / mini-cart count — Verify that the cart icon badge in the header accurately reflects the total number of items after each add, remove, or quantity-change action on a tablet viewport.</li></ol>
+<ol><li>Remove item from cart — Add a product, then reduce quantity to 0 or click the remove icon. Verify the item is removed cleanly and the cart empty state is shown without layout issues on the tablet viewport.</li></ol>
+<ol><li>Multiple product types in one cart — Add one physical product at max quantity and one digital product at a high quantity (e.g., 500) in the same cart session. Verify both line-item totals and the order total are mathematically correct and the physical product limit is still respected while the digital product remains unrestricted.</li></ol>
+<ol><li>Session persistence — Add items to the cart, navigate away to a category page, then return to the cart. Verify the quantity values are preserved and the limits are still enforced after navigation.</li></ol>
+<ul><li>Investigate whether the quantity field enforces limits on blur/focus-out or only on form submission (lazy vs. eager validation).</li><li>Check whether the same product added twice (once from the product page, once from quick-view) accumulates quantity correctly and the total does not exceed the stock limit.</li></ul>
+        </div>
+
+        <div class="section section-full">
+          <div class="section-title">ORACLE — HOW TO DETERMINE PASS/FAIL</div>
+          <ul><li>TC_13 expected: the system prevents the tester from adding more units than the displayed available stock for a physical product. The quantity field must not accept a value above the stated maximum; any attempt must result in the value being capped, an inline validation message, or a blocked Add-to-Cart action. Adding at max-1 and max must succeed.</li><li>TC_14 expected: a digital (downloadable) product has no stock-based quantity cap. Entering 70000 must be accepted and the product must be added to the cart successfully. No &quot;maximum quantity&quot; error should appear.</li><li>TC_15 expected: the quantity limit visible on the product detail page and the limit enforced on the cart page must be identical for the same product. Changing quantity in the cart must not allow values that the product page would have blocked.</li><li>General cart correctness: line-item price = unit price × quantity (no rounding errors visible at any tested quantity).</li><li>UI quality: error messages must be readable and clearly positioned on a tablet viewport; no layout overflow or truncated text when error banners appear.</li><li>PrestaShop conventions: interactive quantity controls (stepper buttons, input fields) must be reachable by tap; no element should require hover to activate on a touch device.</li></ul>
+        </div>
+
+        <div class="section section-full">
+          <div class="section-title">KNOWN DEFECTS &amp; RISKS (from reference docs)</div>
+          <p>No FAIL results were recorded for TC_13, TC_14, or TC_15 in the reference document. All three test cases passed in the reference session.</p>
+<p>Residual risks to probe:</p>
+<ul><li>The reference steps for TC_13 specify testing &quot;beyond available stock&quot; but do not record the exact max value used. Re-confirm the current stock level is consistent with the reference run (stock may change on the live demo).</li><li>TC_14 used 70000 as the large-quantity test value. Verify this value still renders without UI truncation or JavaScript overflow on the current demo build.</li></ul>
+        </div>
+
+        <div class="section section-full">
+          <div class="section-title">EXPLORATORY TESTING AREAS (beyond reference TCs)</div>
+          <div class="sub-label">Heuristics to apply</div>
+<ul><li>GOLDFINGER: Does quantity enforcement follow the same rules as other e-commerce shops the tester knows? Are the error messages industry-standard?</li><li>HICCUPS: Is the behaviour consistent between product detail page and cart? Are prices correct? Is the UI usable (no truncated messages, no overflow)?</li><li>SFDIPOT: Structure (cart widget layout on tablet), Function (add/remove/update), Data (boundary quantities, non-numeric inputs), Interfaces (stepper buttons, direct text input), Platform (tablet touch targets, viewport), Operations (multi-step: add → navigate → update), Time (session persistence)</li><li>FCC CUTS VIDS: Correct (prices match), Consistent (limits same on both pages), Complete (all product types enforced), Unambiguous (error messages clear)</li></ul>
+<div class="sub-label">Specific areas to probe</div>
+<ul><li>Verify stepper (+/-) buttons are large enough to tap accurately on a tablet (minimum 44×44 px touch target per mobile UX guidelines)</li><li>Verify that the quantity input field is wide enough to display 5-digit values (e.g., 70000) without truncation on tablet viewport</li><li>Check that updating quantity via the cart page triggers a visible recalculation of the line total before the user navigates away (no silent background update)</li><li>Verify that removing all instances of a product leaves the cart in a clean empty state with a visible &quot;Your cart is empty&quot; message and a clear CTA</li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">EXIT CONDITIONS (When to stop this session)</div>
+          <ul><li>Time box reached (recommended: 90 minutes)</li><li>TC_13, TC_14, and TC_15 have been fully re-executed against the live demo</li><li>All six numbered exploratory extensions have been investigated or explicitly deferred with a note</li><li>Any critical blocker (e.g., cart completely non-functional) is stopped and reported immediately without waiting for the time box to expire</li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">OUTPUT / DELIVERABLES</div>
+          <ul><li>Completed session sheet (time-on-test, time-on-bugs, time-on-other recorded)</li><li>New defect reports for any bugs found during the session</li><li>Notes on exploratory observations including unexpected UI behaviours, boundary values that produced surprising results, or inconsistencies between product detail page and cart page quantity handling</li><li>Recommendation for each reference TC: reconfirmed pass, new failure, or behaviour changed since reference run</li><li>Session debrief: report time-on-test, time-on-bugs, and time-on-other activities; bring all new defect reports and open questions to the debrief meeting</li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">REFERENCES</div>
+          <div class="ref-block"><div class="ref-key">Source file</div><div class="ref-val">task-testcase-report-tablet.pdf (TC_13–TC_15, area: cart)</div><div class="ref-key">SBTM method</div><div class="ref-val">Bach, J. (1999). Session-Based Test Management.</div><div class="ref-key">Shop URL</div><div class="ref-val">https://demo.prestashop.com/#/en/front</div></div>
+        </div></div>
+      </div>
+    </div>
+
+<div class="page-footer">
+  Generated by test-charter-generator &nbsp;·&nbsp; PrestaShop Demo Shop &nbsp;·&nbsp;
+  <a href="https://demo.prestashop.com/#/en/front">demo.prestashop.com</a>
+  &nbsp;·&nbsp; SBTM — Bach, J. (1999)
+</div>
+
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Charters — Laptop</title>
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #1e2235;
+      background: #eef1f6;
+      margin: 0;
+      padding: 0 0 64px 0;
+    }
+
+    /* ── Cover page ── */
+    .cover {
+      background: linear-gradient(135deg, #27AE60 0%, #1d8248 100%);
+      color: white;
+      padding: 80px 72px 72px 72px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 40px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .cover .label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 20px;
+      position: relative; z-index: 1;
+    }
+    .cover h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0 0 10px 0;
+      line-height: 1.15;
+      position: relative; z-index: 1;
+    }
+    .cover .subtitle {
+      font-size: 16px;
+      opacity: 0.8;
+      margin-bottom: 40px;
+      position: relative; z-index: 1;
+    }
+    .cover .meta {
+      display: flex;
+      gap: 48px;
+      font-size: 12px;
+      opacity: 0.7;
+      flex-wrap: wrap;
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 24px;
+    }
+    .cover .meta span { display: flex; flex-direction: column; gap: 2px; }
+    .cover .meta strong { font-size: 16px; font-weight: 700; opacity: 1; color: white; }
+
+    /* ── TOC ── */
+    .toc {
+      background: white;
+      margin: 40px auto;
+      max-width: 860px;
+      border-radius: 16px;
+      padding: 40px 52px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      page-break-after: always;
+    }
+    .toc h2 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #27AE60;
+      margin-top: 0;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e5f5eb;
+    }
+    .toc ol {
+      padding-left: 0;
+      margin: 0;
+      list-style: none;
+      counter-reset: toc-counter;
+    }
+    .toc li {
+      counter-increment: toc-counter;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f2f5;
+    }
+    .toc li:last-child { border-bottom: none; }
+    .toc li::before {
+      content: counter(toc-counter, decimal-leading-zero);
+      font-size: 11px;
+      font-weight: 700;
+      color: #27AE60;
+      opacity: 0.5;
+      flex-shrink: 0;
+      width: 24px;
+    }
+    .toc a {
+      color: #1e2235;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      flex: 1;
+    }
+    .toc a:hover { color: #27AE60; }
+    .toc .toc-area {
+      font-size: 10px;
+      font-weight: 600;
+      color: white;
+      background: #27AE60;
+      opacity: 0.7;
+      border-radius: 20px;
+      padding: 2px 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      flex-shrink: 0;
+    }
+
+    /* ── Charter card ── */
+    .charter {
+      background: white;
+      margin: 40px auto;
+      max-width: 860px;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      overflow: visible;
+      page-break-inside: avoid;
+      page-break-after: always;
+      scroll-margin-top: 32px;
+    }
+    .charter-header {
+      background: linear-gradient(100deg, #27AE60 0%, #1d8248 100%);
+      color: white;
+      padding: 28px 40px 24px 40px;
+      border-radius: 16px 16px 0 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .charter-header::after {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+    }
+    .charter-id {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      opacity: 0.75;
+      margin-bottom: 10px;
+      position: relative; z-index: 1;
+    }
+    .charter-header h2 {
+      margin: 0 0 12px 0;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.4;
+      position: relative; z-index: 1;
+    }
+    .charter-meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      position: relative; z-index: 1;
+    }
+    .charter-header .platform-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 3px 14px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .charter-body {
+      padding: 36px 40px 40px 40px;
+    }
+
+    /* ── Section grid layout ── */
+    .sections-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 32px;
+    }
+    .section-full { grid-column: 1 / -1; }
+
+    /* ── Sub-labels (e.g. "From Reference Test Cases:") ── */
+    .sub-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #1d8248;
+      margin: 16px 0 8px 0;
+      opacity: 0.7;
+    }
+    .sub-label:first-child { margin-top: 0; }
+
+    /* ── References metadata block ── */
+    .ref-block {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 16px;
+      font-size: 13px;
+      background: #f8f9fc;
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+    .ref-key {
+      font-weight: 600;
+      color: #1d8248;
+      white-space: nowrap;
+    }
+    .ref-val { color: #3a3f52; }
+
+    /* ── TC reference list (in SCOPE section) ── */
+    .tc-ref-list {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .tc-ref-list li {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 7px 12px;
+      margin-bottom: 4px;
+      border-radius: 6px;
+      background: #f8f9fc;
+      font-size: 13px;
+      color: #3a3f52;
+      line-height: 1.5;
+    }
+    .tc-ref-list li .tc-id {
+      font-weight: 700;
+      color: #1d8248;
+      white-space: nowrap;
+      min-width: 52px;
+    }
+    .tc-ref-list li .tc-title { flex: 1; }
+
+    /* ── Sections ── */
+    .section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #27AE60;
+      margin-bottom: 14px;
+    }
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 14px;
+      background: #27AE60;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .section p {
+      margin: 0 0 10px 0;
+      color: #3a3f52;
+      line-height: 1.7;
+    }
+    .section p:last-child { margin-bottom: 0; }
+
+    /* ── Ordered lists (numbered test ideas) ── */
+    .section ol {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+      counter-reset: idea-counter;
+    }
+    .section ol li {
+      counter-increment: idea-counter;
+      display: flex;
+      gap: 14px;
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      background: #f8f9fc;
+      border-left: 3px solid #e5f5eb;
+      line-height: 1.6;
+      color: #3a3f52;
+      font-size: 14px;
+    }
+    .section ol li:hover {
+      background: #f0f3fa;
+      border-left-color: #27AE60;
+    }
+    .section ol li::before {
+      content: counter(idea-counter);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #27AE60;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Unordered lists (bullets) ── */
+    .section ul {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .section ul li {
+      display: flex;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid #f0f2f5;
+      color: #3a3f52;
+      font-size: 14px;
+      line-height: 1.6;
+      align-items: flex-start;
+    }
+    .section ul li:last-child { border-bottom: none; }
+    .section ul li::before {
+      content: '';
+      display: inline-block;
+      min-width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #27AE60;
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    /* ── Test case table ── */
+    .tc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 4px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .tc-table th {
+      background: #e5f5eb;
+      color: #1d8248;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    .tc-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0f2f5;
+      vertical-align: top;
+      color: #3a3f52;
+    }
+    .tc-table tr:last-child td { border-bottom: none; }
+    .tc-table tr:hover td { background: #fafbfe; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .badge-pass { background: #d1fae5; color: #065f46; }
+    .badge-fail { background: #fee2e2; color: #991b1b; }
+
+    /* ── Defect table ── */
+    .defect-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 4px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .defect-table th {
+      background: #fef9ec;
+      color: #92400e;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    .defect-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f0f2f5;
+      vertical-align: top;
+      color: #3a3f52;
+    }
+    .severity-high   { color: #b91c1c; font-weight: 700; }
+    .severity-major  { color: #b91c1c; font-weight: 700; }
+    .severity-medium { color: #d97706; font-weight: 600; }
+    .severity-minor  { color: #059669; font-weight: 600; }
+    .severity-low    { color: #059669; font-weight: 600; }
+
+    /* ── Footer ── */
+    .page-footer {
+      max-width: 860px;
+      margin: 0 auto 48px auto;
+      text-align: center;
+      font-size: 12px;
+      color: #9ca3af;
+      padding: 24px 36px 0 36px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .page-footer a { color: #9ca3af; }
+
+    /* ── Print ── */
+    @media print {
+      body { background: white; padding: 0; }
+      .charter { box-shadow: none; border: 1px solid #e5e7eb; margin: 20px auto; }
+      .toc { box-shadow: none; border: 1px solid #e5e7eb; }
+      .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .charter-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .section ol li { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .toc li::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+
+    <div class="cover">
+      <div class="label">Session-Based Test Management · SBTM</div>
+      <h1>Test Charters<br>Laptop</h1>
+      <div class="subtitle">PrestaShop Demo Shop &nbsp;·&nbsp; demo.prestashop.com</div>
+      <div class="meta">
+        <span><strong>1</strong>Charters</span>
+        <span><strong>Laptop</strong>Platform</span>
+        <span><strong>July 04, 2026</strong>Generated</span>
+      </div>
+    </div>
+
+
+    <div class="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li>
+          <a href="#chr-lap-auth-003">Auth & Registration (TC_04, TC_12, TC_13 | DEF-03, DEF-07, DEF-08)</a>
+          <span class="toc-area">Auth & Registration (TC_04, TC_12, TC_13 | DEF-03, DEF-07, DEF-08)</span>
+        </li></ol>
+    </div>
+
+
+    <div class="charter" id="chr-lap-auth-003">
+      <div class="charter-header">
+        <div class="charter-id">Charter &nbsp;·&nbsp; Laptop &nbsp;·&nbsp; Auth & Registration &nbsp;·&nbsp; #3</div>
+        <h2>Auth & Registration (TC_04, TC_12, TC_13 | DEF-03, DEF-07, DEF-08)</h2>
+        <div class="charter-meta">
+          <span class="platform-badge">Laptop</span>
+          <span class="platform-badge">Auth & Registration (TC_04, TC_12, TC_13 | DEF-03, DEF-07, DEF-08)</span>
+        </div>
+      </div>
+      <div class="charter-body">
+        <div class="sections-grid">
+        <div class="section section-full">
+          <div class="section-title">MISSION</div>
+          <p>Explore the Account Creation, Login, and Email Uniqueness area of the PrestaShop demo shop on Laptop to discover defects related to registration flow, password requirement visibility, duplicate email enforcement, and authentication integrity after duplicate registration.</p>
+<div class="sub-label">Focus Areas</div>
+<ul><li>Account registration flow via checkout &quot;Create an account&quot; path</li><li>Password requirements visibility and inline feedback during input</li><li>Email uniqueness enforcement at registration time</li><li>Login behavior and account integrity after duplicate email registration</li><li>Inline form validation: required fields, field formats, error messages</li><li>Edge cases: special characters in name/email, very long inputs, empty submissions</li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">SCOPE — WHAT IS COVERED</div>
+          <p>This session covers the full account creation and login surface on the laptop browser, including the checkout-triggered registration path and the dedicated registration/login pages. It re-executes the three reference test cases that FAILED and adds exploratory depth around the known defect areas. Reference Test Cases Included:</p>
+<ul class="tc-ref-list"><li><span class="tc-id">TC_04</span><span class="tc-title">Test password requirements visibility during account creation  <span class="badge badge-fail">FAIL</span></span></li><li><span class="tc-id">TC_12</span><span class="tc-title">Test unique email enforcement during registration              <span class="badge badge-fail">FAIL</span></span></li><li><span class="tc-id">TC_13</span><span class="tc-title">Test login behavior after duplicate email registration         <span class="badge badge-fail">FAIL</span></span></li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">SCOPE — WHAT IS NOT COVERED</div>
+          <ul><li>Back-end authentication implementation or database layer</li><li>Password reset / forgot-password flow (separate charter)</li><li>Social login or third-party OAuth integrations</li><li>Admin panel user management</li><li>Performance or load testing of registration endpoints</li><li>Accessibility audit (WCAG compliance)</li><li>Payment processing during checkout</li><li>Guest checkout path (no account creation)</li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">START CONDITIONS (Preconditions)</div>
+          <ul><li>Browser/Device: Chrome (latest) and Safari on MacBook (macOS)</li><li>URL: https://demo.prestashop.com/#/en/front</li><li>Account status: logged out (no active session)</li><li>Cart state: contains at least one product (to reach checkout registration path)</li><li>Test data prepared before session:</li><li>Primary email:   testuser+lap003a@mailinator.com</li><li>Secondary email: testuser+lap003b@mailinator.com</li><li>Duplicate email for DEF-07/08 scenarios: testuser+lap003dup@mailinator.com</li><li>Weak password (fails complexity): password123</li><li>Strong password (meets complexity): Test@1234!</li><li>Password missing special char: TestPass99</li><li>Password missing uppercase: test@1234!</li><li>First name with 255 chars and with special characters (e.g. &quot;José&quot;)</li><li>Email without @ symbol (malformed): notanemail.com</li><li>Network: standard broadband (no throttling)</li></ul>
+        </div>
+
+        <div class="section section-full">
+          <div class="section-title">TEST IDEAS &amp; EXPLORATION NOTES</div>
+          <div class="sub-label">From Reference Test Cases</div>
+<ol><li>TC_04 — Password requirements visibility during account creation Navigate to checkout, select &quot;Create an account&quot;. Locate the password field. Before typing anything, check whether password rules (minimum length, required character types) are displayed inline, as a tooltip, or are absent entirely. Type a weak password (e.g. &quot;password123&quot;) and attempt to submit; observe whether the error message names the specific unmet rule(s) or shows a generic failure. Verify that a compliant password (e.g. &quot;Test@1234!&quot;) is accepted without error. Note: the reference test reports requirements are not shown clearly before submission — confirm and document the exact UX gap (no hint / hint appears only after submit / hint appears on focus but is incomplete).</li></ol>
+<ol><li>TC_12 — Email uniqueness enforcement during registration Register a new account with testuser+lap003dup@mailinator.com and complete the flow. Log out. Return to the registration page. Attempt a second registration with the identical email address. Observe whether the system: (a) shows an inline error immediately on the email field, or (b) allows the form to submit and then shows a page-level error, or (c) silently creates a duplicate account (the known failure mode). If a second account is created, note whether the user is auto-logged-in under the new account or encounters an error.</li></ol>
+<ol><li>TC_13 — Login after duplicate email registration Following the TC_12 duplicate registration scenario, attempt to log in using the original account credentials (same email, original password). Verify whether login succeeds, fails silently, or produces an error message. If login fails, attempt login with the second account's password to determine which credential set the system now accepts.</li></ol>
+<div class="sub-label">Exploratory Extensions (not in reference docs)</div>
+<ol><li>Password field — character-type boundary probing Systematically test passwords that are missing exactly one complexity requirement at a time: (a) no uppercase, (b) no digit, (c) no special character, (d) too short by one character. Confirm each produces a specific, actionable error message rather than a generic &quot;invalid password&quot; response.</li></ol>
+<ol><li>Password visibility toggle Check whether a show/hide toggle exists on the password field. If present, verify it toggles the field type between &quot;password&quot; and &quot;text&quot;. If absent, note as a usability gap (no severity defect, but noteworthy for UX).</li></ol>
+<ol><li>Email field — format validation before submit Enter a malformed email (notanemail.com, user@, @domain.com) and tab out of the field. Verify whether inline validation fires on blur or only on form submit. Confirm the error message is specific (&quot;Please enter a valid email address&quot;).</li></ol>
+<ol><li>Required field handling — empty form submission Leave all fields blank and click submit. Verify all required fields are highlighted and an actionable error is shown for each. Note if any required field is unmarked.</li></ol>
+<ol><li>Name fields — boundary and special character input Enter a first name of 255 characters; verify the field either accepts or caps it with a visible counter. Enter a name with accented characters (e.g. &quot;José Müller&quot;) and verify the value is preserved correctly after account creation.</li></ol>
+<ol><li>Account creation via login page vs. checkout path Locate whether there is a standalone registration page (separate from checkout). If one exists, verify whether the same password-requirements and email-uniqueness bugs are present on that path as on the checkout path.</li></ol>
+<ol><li>Post-registration — account landing state After a successful registration, verify the user is automatically logged in, their name appears in the header, and they can navigate to &quot;My Account&quot; to see their details. Verify the email address saved in the account matches what was entered.</li></ol>
+<ol><li>Session persistence After registering and being auto-logged-in, refresh the page and verify the session is maintained (user remains logged in, cart content preserved).</li></ol>
+        </div>
+
+        <div class="section section-full">
+          <div class="section-title">ORACLE — HOW TO DETERMINE PASS/FAIL</div>
+          <ul><li>TC_04 expected: The password input field displays the complexity rules (minimum length, required character types) inline on the form — either as a persistent hint below the field, a tooltip on focus, or a progressive strength indicator — so the user knows the requirements BEFORE attempting submission. A generic post-submit error with no prior hint is incorrect behavior.</li></ul>
+<ul><li>TC_12 expected: When submitting a registration form with an email address already associated with an existing account, the system must prevent account creation and display a clear validation message (e.g. &quot;An account already exists for this email address&quot;). No new account should be created; the existing account must remain intact.</li></ul>
+<ul><li>TC_13 expected: After any failed or successful registration attempt, the original account created with a given email address must remain fully accessible. Login with the original email and password must succeed. If a duplicate was created, the system must at minimum protect the original account's credentials and session.</li></ul>
+<ul><li>General form validation: all required-field errors must identify the specific field and the specific constraint violated; generic &quot;form has errors&quot; messages without field-level attribution are a usability defect.</li></ul>
+<ul><li>PrestaShop UX conventions: error messages appear inline adjacent to the offending field; no page reload required for field-level validation feedback.</li></ul>
+<ul><li>Data integrity: the email stored in the account after registration must exactly match the input (no silent trimming, no case conversion without display feedback).</li></ul>
+        </div>
+
+        <div class="section section-full">
+          <div class="section-title">KNOWN DEFECTS &amp; RISKS (from reference docs)</div>
+          <ul><li>TC_04 FAILED: Password requirements are not shown clearly before form submission. The user receives a rejection after submitting a non-compliant password with no advance guidance on what the rules are. DEFECT DEF-03: &quot;Page content is not fully translated after language switch&quot; (Note: DEF-03 title appears to be a copy-paste error in the source document; the description correctly describes the password requirements visibility issue in the Authentication module. Severity: Minor / Priority: Medium.)</li></ul>
+<ul><li>TC_12 FAILED: Duplicate accounts can be created with the same email address. DEFECT DEF-07: &quot;System allows creation of multiple accounts with the same email address.&quot; Severity: Major / Priority: High. The email uniqueness constraint is not enforced at the application layer.</li></ul>
+<ul><li>TC_13 FAILED: Original account login is broken after a duplicate registration. DEFECT DEF-08: &quot;Duplicate account registration with same email prevents login to original account.&quot; Severity: Critical / Priority: High. A second registration with the same email renders the original credentials invalid — a critical authentication integrity failure that can lead to account takeover or permanent lockout.</li></ul>
+<p>Risk note: DEF-07 and DEF-08 are chained: DEF-07 is the root cause that enables DEF-08. If a fix is applied that blocks duplicate registrations (DEF-07), DEF-08 should be re-tested to confirm the original account is also protected retroactively.</p>
+        </div>
+
+        <div class="section section-full">
+          <div class="section-title">EXPLORATORY TESTING AREAS (beyond reference TCs)</div>
+          <div class="sub-label">Heuristics to apply</div>
+<ul><li>GOLDFINGER: Does the registration form follow established web conventions (inline validation, clear labeling, password rules visible)?</li><li>HICCUPS: Is the UI consistent (same validation style across all fields)? Is it correct (email stored matches email entered)? Is it usable (can a new user register without external help)?</li><li>SFDIPOT: Data — are edge-case inputs (empty, max-length, special chars) handled gracefully? Interfaces — does the checkout registration path behave identically to the standalone registration path?</li><li>FCC CUTS VIDS: Correct (no duplicate accounts), Complete (all required validations present), Consistent (same rules on all registration entry points).</li></ul>
+<div class="sub-label">Specific areas to probe</div>
+<ol><li>Verify whether password rules are documented anywhere on the page (help text, tooltip, modal) — even if not shown inline, a link to requirements would be better than silence.</li><li>Test the &quot;Forgot password&quot; link visibility on the login page — confirm it exists and leads to a recoverable flow (scope: verify link is present only; do not execute the full reset flow in this session).</li><li>Attempt to register with an email that has leading/trailing spaces (e.g. &quot; user@test.com &quot;) — verify trimming behavior.</li><li>Verify the &quot;Sign in&quot; and &quot;Create account&quot; CTAs are clearly distinguishable on the login/registration page to avoid user confusion.</li><li>Cross-browser check: repeat TC_04 in both Chrome and Safari to determine if the password-hint gap is browser-specific (source defect was reported on Safari).</li></ol>
+        </div>
+
+        <div class="section">
+          <div class="section-title">EXIT CONDITIONS (When to stop this session)</div>
+          <ul><li>Time box reached (recommended: 90 minutes)</li><li>TC_04, TC_12, TC_13 have all been re-executed and results recorded</li><li>All numbered exploratory ideas (1–8) have been investigated or explicitly deferred</li><li>Any Critical-severity defect (e.g. account lockout replication of DEF-08) is immediately reported and the session lead is notified</li><li>All new defects have draft defect reports created before session close</li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">OUTPUT / DELIVERABLES</div>
+          <ul><li>Completed session sheet (tester fills in: actual results, time log, notes)</li><li>Re-execution results for TC_04, TC_12, TC_13 (PASS / FAIL / BLOCKED)</li><li>New defect reports for any bugs found beyond DEF-03, DEF-07, DEF-08</li><li>Notes on exploratory observations (unexpected behaviors, UX gaps)</li><li>Confirmed status of DEF-03, DEF-07, DEF-08: still reproducible / fixed / changed</li><li>Recommendation: re-test, defer, escalate, or close for each open defect</li><li>Session debrief: report time-on-test, time-on-bugs, and time-on-other activities; bring all new defect reports and open questions to the debrief meeting</li></ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">REFERENCES</div>
+          <div class="ref-block"><div class="ref-key">Source file</div><div class="ref-val">test_case_and_proper_defect_report_laptop.xlsx</div><div class="ref-key">Area</div><div class="ref-val">Auth &amp; Registration (TC_04, TC_12, TC_13 | DEF-03, DEF-07, DEF-08)</div><div class="ref-key">SBTM method</div><div class="ref-val">Bach, J. (1999). Session-Based Test Management.</div><div class="ref-key">Shop URL</div><div class="ref-val">https://demo.prestashop.com/#/en/front</div></div>
+        </div></div>
+      </div>
+    </div>
+
+<div class="page-footer">
+  Generated by test-charter-generator &nbsp;·&nbsp; PrestaShop Demo Shop &nbsp;·&nbsp;
+  <a href="https://demo.prestashop.com/#/en/front">demo.prestashop.com</a>
+  &nbsp;·&nbsp; SBTM — Bach, J. (1999)
+</div>
+
+</body>
+</html>
