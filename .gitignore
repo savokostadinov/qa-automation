@@ -56,6 +56,7 @@ logs/
 screen-recordings/
 *.log
 output/
+!docs/skill-test-charters/output/
 
 ### Environment & Configuration ###
 .env
